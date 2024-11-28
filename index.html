@@ -3,18 +3,17 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-    <title>Fullscreen Video</title>
+    <title>Video Switcher</title>
     <style type="text/css">
-        /* Remove any default margins and make sure the body takes up the whole screen */
+        /* Ensure the video takes up the entire page */
         body, html {
             margin: 0;
             padding: 0;
             height: 100%;
             overflow: hidden;
         }
-        
-        /* Make sure the video covers the entire screen */
-        video#video {
+
+        video {
             height: 100%;
             width: 100%;
             object-fit: cover;
@@ -22,32 +21,30 @@
     </style>
 </head>
 <body>
-    <!-- Video element -->
-    <video id="video" autoplay muted loop>
-        <source src="media/video.mp4" type="video/mp4">
+    <!-- Overlay video (initial video) -->
+    <video id="overlayVideo" autoplay muted loop>
+        <source src="media/overlay.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+
+    <!-- Main video (will be switched to when clicked) -->
+    <video id="mainVideo" style="display: none;" autoplay muted loop>
+        <source src="media/media.mp4" type="video/mp4">
         Your browser does not support the video tag.
     </video>
 
     <script type="text/javascript">
-        const video = document.getElementById("video");
+        const overlayVideo = document.getElementById("overlayVideo");
+        const mainVideo = document.getElementById("mainVideo");
 
-        // Function to make the video fullscreen
-        function videoClick() {
-            const { documentElement } = document;
-            if (documentElement.requestFullscreen) {
-                documentElement.requestFullscreen();
-            } else if (documentElement.mozRequestFullScreen) { // Firefox
-                documentElement.mozRequestFullScreen();
-            } else if (documentElement.webkitRequestFullscreen) { // Chrome, Safari, Opera
-                documentElement.webkitRequestFullscreen();
-            } else if (documentElement.msRequestFullscreen) { // IE/Edge
-                documentElement.msRequestFullscreen();
-            }
-        }
-
-        // Play video and enter fullscreen immediately when the page loads
-        video.play();
-        videoClick();
+        // Switch from overlay video to main video when user clicks anywhere on the page
+        document.body.addEventListener('click', () => {
+            // Hide overlay video
+            overlayVideo.style.display = 'none';
+            // Show main video and start playing
+            mainVideo.style.display = 'block';
+            mainVideo.play();
+        });
     </script>
 </body>
 </html>
