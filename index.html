@@ -1,34 +1,53 @@
-<div class="scare">
-<video id="video" class="video" src="media/video.mp4" loop></video>
-</div>
-<script type="text/javascript">
-            const video = document.getElementById("video");
-            const overlay = document.getElementById("overlay");
-            const declineButton = document.getElementById("decline-button");
-            const acceptButton = document.getElementById("accept-button");
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <title>Fullscreen Video</title>
+    <style type="text/css">
+        /* Remove any default margins and make sure the body takes up the whole screen */
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+        }
+        
+        /* Make sure the video covers the entire screen */
+        video#video {
+            height: 100%;
+            width: 100%;
+            object-fit: cover;
+        }
+    </style>
+</head>
+<body>
+    <!-- Video element -->
+    <video id="video" autoplay muted loop>
+        <source src="media/video.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
 
-            let hasClicked;
+    <script type="text/javascript">
+        const video = document.getElementById("video");
 
-            window.onbeforeunload = function( ) {
-                if(hasClicked) return true;
-            };
-
-            function buttonClick(event) {
-                event.preventDefault();
-                if(!hasClicked) hasClicked = true;
-                overlay.hidden = true;
-                video.play();
-                videoClick();
+        // Function to make the video fullscreen
+        function videoClick() {
+            const { documentElement } = document;
+            if (documentElement.requestFullscreen) {
+                documentElement.requestFullscreen();
+            } else if (documentElement.mozRequestFullScreen) { // Firefox
+                documentElement.mozRequestFullScreen();
+            } else if (documentElement.webkitRequestFullscreen) { // Chrome, Safari, Opera
+                documentElement.webkitRequestFullscreen();
+            } else if (documentElement.msRequestFullscreen) { // IE/Edge
+                documentElement.msRequestFullscreen();
             }
+        }
 
-            function videoClick(event) {
-                if(event) event.preventDefault();
-                // if not fullscreen
-                const { documentElement } = document;
-                if(documentElement.requestFullscreen) documentElement.requestFullscreen();
-                else if(documentElement.mozRequestFullScreen) documentElement.mozRequestFullScreen();
-                else if(documentElement.webkitRequestFullscreen) documentElement.webkitRequestFullscreen();
-                else if(documentElement.msRequestFullscreen) documentElement.msRequestFullscreen();
-            }
-            video.addEventListener("click", videoClick);
-        </script>
+        // Play video and enter fullscreen immediately when the page loads
+        video.play();
+        videoClick();
+    </script>
+</body>
+</html>
